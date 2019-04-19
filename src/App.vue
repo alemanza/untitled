@@ -5,9 +5,19 @@
       <router-link to="/about">About</router-link>
     </div>
     <router-view/>
+    <Logout />
   </div>
 </template>
 
+<script>
+import Logout from '@/components/atoms/Logout'
+
+export default {
+  components: {
+    Logout
+  }
+}
+</script>
 <style lang="scss">
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
