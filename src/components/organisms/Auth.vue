@@ -21,7 +21,13 @@ export default {
         // Providers
         Firebase.auth.TwitterAuthProvider.PROVIDER_ID,
         Firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        Firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+        {
+          provider: Firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+          scopes: [
+            'public_profile',
+            'email',
+          ],
+        },
         Firebase.auth.EmailAuthProvider.PROVIDER_ID,
       ],
       // tosUrl and privacyPolicyUrl accept either url string or a callback
