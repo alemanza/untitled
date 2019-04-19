@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h3>Auth</h3>
+    <h3>Login</h3>
     <br>
-    <div id="fireui-container"></div>
+    <div id="auth-container"></div>
   </div>
 </template>
 
@@ -14,32 +14,33 @@ import 'firebaseui/dist/firebaseui.css'
 
 export default {
   name: 'Auth',
-  created() {
+  mounted() {
     const uiConfig = {
-    signInSuccessUrl: '/about',
-    signInOptions: [
-      // Leave the lines as is for the providers you want to offer your users.
-      Firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      Firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-      Firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-      Firebase.auth.EmailAuthProvider.PROVIDER_ID,
-    ],
-    // tosUrl and privacyPolicyUrl accept either url string or a callback
-    // function.
-    // Terms of service url/callback.
-    tosUrl: '<your-tos-url>',
-    // Privacy policy url/callback.
-    privacyPolicyUrl: function() {
-      window.location.assign('<your-privacy-policy-url>');
-    }
-  };
+      signInSuccessUrl: '/about',
+      signInOptions: [
+        // Providers
+        Firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+        Firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        Firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+        Firebase.auth.EmailAuthProvider.PROVIDER_ID,
+      ],
+      // tosUrl and privacyPolicyUrl accept either url string or a callback
+      // function.
+      // Terms of service url/callback.
+      tosUrl: () => {
+        window.location.assign('/tos')
+      },
+      // Privacy policy url/callback.
+      privacyPolicyUrl: () => {
+        window.location.assign('/privacy-policy')
+      }
+    };
 
     // Initialize the FirebaseUI Widget using Firebase.
     const ui = new FireUi.auth.AuthUI(Firebase.auth());
     // The start method will wait until the DOM is loaded.
-    ui.start('#fireui-container', uiConfig);
-  },
-
+    ui.start('#auth-container', uiConfig);
+  }
 }
 </script>
 
