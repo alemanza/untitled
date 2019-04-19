@@ -5,7 +5,7 @@
       <div class="actions-items">
         <span class="item"><strong>+</strong> Crear encuesta</span>
       </div>
-      <Avatar :id="2"/>
+      <Avatar :id="48"/>
     </nav>
   </header>
 </template>

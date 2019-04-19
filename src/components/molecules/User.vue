@@ -1,7 +1,10 @@
 <template>
   <div class="user">
-    <Avatar :id="1"/>
-    <span class="name">Marina Espósito</span>
+    <Avatar :id="1" class="-md"/>
+    <div class="description">
+      <span class="name">Marina Espósito</span>
+      <span class="surveys">25 encuestas</span>
+    </div>
     <Button class="button">Seguir</Button>
   </div>
 </template>
@@ -24,17 +27,28 @@ export default {
 .user {
   display: flex;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
+}
+
+.description {
+  margin-left: 12px;
 }
 
 .name {
+  color: #FFF;
+  display: block;
   font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.surveys {
   color: #CACACA;
-  margin-left: 12px;
+  display: block;
+  font-size: 12px;
 }
 
 .button {
-  margin-left: 12px;
+  margin-left: 16px;
 }
 
 </style>

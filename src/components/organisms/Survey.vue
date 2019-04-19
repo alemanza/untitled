@@ -12,19 +12,32 @@
         <h3>{{survey.statement}}</h3>
       </div>
     </div>
+
     <ul class="options">
       <li v-for="(opt, key) in survey.options"
         :key="key"
         class="option"
       >
         <label class="option-container">
-          <input class="option-input" v-model="survey.id" type="radio" :value="key">
+          <input class="option-input"
+            v-model="survey.id"
+            type="radio"
+            :value="key"
+            @change="handleSelect"
+          >
           <span class="option-label">
             {{opt}}
           </span>
         </label>
       </li>
     </ul>
+
+    <div v-if="selected" ref="surveyButton" class="submit-container">
+      <div class="submit">
+        <i class="submit-icon ion-ios-settings"></i>
+        <span class="submit-label">Enviar</span>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -52,16 +65,22 @@ export default {
           'Frente de Izquierda y de los Trabajadores',
           'Otro partido'
         ],
-      }
+      },
+      selected: false
     }
   },
+  methods: {
+    handleSelect() {
+      if (!this.selected) this.selected = true
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .header {
   background-color: #252526;
-  padding: 20px 24px 54px;
+  padding: 24px 24px 54px;
 }
 
 .statement {
@@ -153,6 +172,32 @@ export default {
       opacity: 1;
     }
   }
+}
+
+.submit-container {
+  padding: 0 24px 24px;
+}
+
+.submit {
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFF;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 52px;
+  background-color: #131415;
+}
+
+.submit-icon {
+  font-size: 20px;
+}
+
+.submit-label {
+  font-size: 16px;
+  margin-left: 12px;
 }
 
 </style>
