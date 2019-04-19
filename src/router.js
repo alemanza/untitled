@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from './views/Login.vue'
-import Tos from './views/Tos.vue'
-import PrivacyPolicy from './views/PrivacyPolicy.vue'
+import Home from './views/Home';
+import Login from './views/Login'
+import Tos from './views/Tos'
+import PrivacyPolicy from './views/PrivacyPolicy'
 
 import Firebase from 'firebase/app'
 
@@ -15,6 +16,11 @@ const router = new Router({
     {
       path: '*',
       redirect: '/login'
+    },
+    {
+      path: '/',
+      name: 'Home',
+      component: Home
     },
     {
       path: '/login',
