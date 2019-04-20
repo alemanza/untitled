@@ -32,7 +32,7 @@
       </li>
     </ul>
 
-    <div v-if="selected" ref="surveyButton" class="submit-container">
+    <div v-show="selected" ref="surveyButton" class="submit-container">
       <div class="submit">
         <i class="submit-icon ion-ios-settings"></i>
         <span class="submit-label">Enviar</span>
@@ -44,6 +44,8 @@
 <script>
 import User from '@/components/molecules/User'
 import Stats from '@/components/molecules/Stats'
+
+import VueScrollTo from 'vue-scrollto'
 
 export default {
   name: 'Survey',
@@ -70,8 +72,28 @@ export default {
     }
   },
   methods: {
+    scrollToBottom() {
+      const target = this.$refs.surveyButton
+      const targetHeight = target.offsetHeight
+      const windowHeight = window.innerHeight
+      const targetOffset = targetHeight - windowHeight
+      const options = {
+        offset: targetOffset,
+        easing: 'ease-out'
+      }
+
+      VueScrollTo.scrollTo(this.$refs.surveyButton, 200, options)
+    },
     handleSelect() {
       if (!this.selected) this.selected = true
+
+      // bottomOfWindow
+      if (window.pageYOffset + window.innerHeight !== document.documentElement.offsetHeight) {
+        setTimeout(() => {
+          this.scrollToBottom()
+        },200)
+      }
+
     }
   }
 }
@@ -176,6 +198,8 @@ export default {
 
 .submit-container {
   padding: 0 24px 24px;
+  box-sizing: border-box;
+  // height: 1200px;
 }
 
 .submit {
