@@ -4,14 +4,13 @@ import router from './router'
 import store from './store/store'
 import './registerServiceWorker'
 
-import Firebase from 'firebase/app'
-import './helpers/firebaseConf'
+import { Auth, DB } from './helpers/firebaseConf'
 
 Vue.config.productionTip = false
 
 let app = null
 
-Firebase.auth().onAuthStateChanged(user => {
+Auth.onAuthStateChanged(user => {
   if (!app) {
     app = new Vue({
       router,
@@ -31,8 +30,19 @@ Firebase.auth().onAuthStateChanged(user => {
       uid
     }
 
-    store.dispatch('loginUser', currentUser)
-    .then(() => console.log('Usuario logueado'))
-    .catch(err => console.error(err))
+    DB.collection('users').doc(currentUser.uid).set({
+      email,
+      displayName,
+      photoURL
+    }).then(() => {
+      store.dispatch('loginUser', currentUser)
+        .then(() => {
+          console.log('Usuario logueado')
+        })
+        .catch(err => console.error(err))
+    }).catch(err => {
+      console.error(err)
+    })
+
   }
 })
