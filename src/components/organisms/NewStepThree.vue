@@ -30,7 +30,7 @@
       <br>
       <br>
       <br>
-      <button @click="$emit('nextStep', survey)">Siguiente</button>
+      <button @click="$emit('submit', survey)">Siguiente</button>
     </div>
   </div>
 </template>

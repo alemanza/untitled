@@ -6,6 +6,9 @@
     </div> -->
     <Header/>
     <router-view/>
+    <br>
+    <br>
+    <br>
     <Logout />
   </div>
 </template>

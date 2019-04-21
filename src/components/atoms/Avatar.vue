@@ -1,6 +1,6 @@
 <template>
   <figure class="avatar">
-    <img class="avatar-img" :src="`http://i.pravatar.cc/80?img=${id}`">
+    <img class="avatar-img" :src="url">
   </figure>
 </template>
 
@@ -8,9 +8,9 @@
 export default {
   name: 'Avatar',
   props: {
-    id: {
-      type: Number,
-      default: 1
+    url: {
+      type: String,
+      default: 'http://i.pravatar.cc/80?img=1'
     }
   }
 

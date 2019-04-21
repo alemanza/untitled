@@ -1,6 +1,6 @@
 <template>
   <div class="user">
-    <Avatar :id="1" class="-md"/>
+    <Avatar class="-md"/>
     <div class="description">
       <span class="name">Marina Espósito</span>
       <span class="surveys">25 encuestas</span>

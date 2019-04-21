@@ -16,3 +16,11 @@ export default {
 }
 
 </script>
+
+<style lang="scss" scoped>
+.statement {
+  font-size: 24px;
+  color: #FEFEFE;
+  line-height: 32px;
+}
+</style>

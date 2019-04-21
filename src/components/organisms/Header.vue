@@ -5,7 +5,7 @@
       <div class="actions-items">
         <span class="item"><strong>+</strong> Crear encuesta</span>
       </div>
-      <Avatar :id="48"/>
+      <Avatar :url="user.photoURL"/>
     </nav>
   </header>
 </template>
@@ -19,6 +19,12 @@ export default {
   components: {
     Logo,
     Avatar
+  },
+  computed: {
+    user() {
+      const user = this.$store.getters.currentUser
+      return user ? user : {}
+    }
   }
 }
 </script>
