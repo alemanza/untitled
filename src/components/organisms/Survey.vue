@@ -8,10 +8,12 @@
       <!-- Survey Stats -->
       <Stats />
 
-      <div class="statement">
-        <h3>{{survey.statement}}</h3>
-      </div>
+      <!-- Survey Statement -->
+      <Statement :text="survey.statement"/>
+
     </div>
+
+    <Options :text="survey.statement"/>
 
     <ul class="options">
       <li v-for="(opt, key) in survey.options"
@@ -44,6 +46,7 @@
 <script>
 import User from '@/components/molecules/User'
 import Stats from '@/components/molecules/Stats'
+import Statement from '@/components/molecules/Statement'
 
 import VueScrollTo from 'vue-scrollto'
 
@@ -52,6 +55,7 @@ export default {
   components: {
     User,
     Stats,
+    Statement,
   },
   data() {
     return {

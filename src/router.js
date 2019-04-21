@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home';
 import Login from './views/Login'
+import New from './views/New'
 import Tos from './views/Tos'
 import PrivacyPolicy from './views/PrivacyPolicy'
 
@@ -37,6 +38,11 @@ const router = new Router({
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: '/new',
+      name: 'New',
+      component: New
     },
     {
       path: '/tos',
