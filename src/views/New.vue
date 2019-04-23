@@ -1,29 +1,32 @@
 <template>
   <div>
-    <NewStepOne v-show="currentStep === 1" @nextStep="handleNextStep"/>
-    <NewStepTwo v-show="currentStep === 2" @nextStep="handleNextStep"/>
-    <NewStepThree v-show="currentStep === 3" @submit="submit"/>
+    <HeaderComponent>
+      <h2 class="title">Nueva encuesta</h2>
+      <EditStatement/>
+    </HeaderComponent>
+    <EditOptions/>
+    <EditTags @submit="submit"/>
   </div>
 </template>
 
 <script>
-import NewStepOne from '@/components/organisms/NewStepOne'
-import NewStepTwo from '@/components/organisms/NewStepTwo'
-import NewStepThree from '@/components/organisms/NewStepThree'
+import HeaderComponent from '@/components/atoms/HeaderComponent'
+import EditStatement from '@/components/organisms/EditStatement'
+import EditOptions from '@/components/organisms/EditOptions'
+import EditTags from '@/components/organisms/EditTags'
 
 import { DB } from '../helpers/firebaseConf'
-
 
 export default {
   name: 'New',
   components: {
-    NewStepOne,
-    NewStepTwo,
-    NewStepThree,
+    HeaderComponent,
+    EditStatement,
+    EditOptions,
+    EditTags,
   },
   data() {
     return {
-      currentStep: 1,
       survey: {}
     }
   },
@@ -33,8 +36,7 @@ export default {
     }
   },
   methods: {
-    handleNextStep(data) {
-      this.currentStep = this.currentStep + 1
+    statementChange(data) {
       this.survey = { ...this.survey, ...data }
     },
     submit(data) {
@@ -61,6 +63,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.title {
+  color: #FFF;
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 40px;
+  letter-spacing: -.2px;
+}
 </style>
 

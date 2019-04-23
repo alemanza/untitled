@@ -1,6 +1,6 @@
 <template>
   <section class="survey">
-    <div class="header">
+    <HeaderComponent>
 
       <!-- Survey User -->
       <User/>
@@ -11,21 +11,15 @@
       <!-- Survey Statement -->
       <Statement :text="survey.statement"/>
 
-    </div>
+    </HeaderComponent>
 
     <!-- Survey Options -->
-    <Options
-      :options="survey.options"
-      :id="survey.id"
-      @handleSelect="handleSelect"
-    />
-
-    <!-- <ul class="options">
+    <Options class="-inline">
       <li v-for="(opt, key) in survey.options"
         :key="key"
         class="option"
       >
-        <label class="option-container">
+        <label>
           <input class="option-input"
             v-model="survey.id"
             type="radio"
@@ -37,7 +31,8 @@
           </span>
         </label>
       </li>
-    </ul> -->
+
+    </Options>
 
     <div v-show="selected" ref="surveyButton" class="submit-container">
       <div class="submit">
@@ -49,6 +44,7 @@
 </template>
 
 <script>
+import HeaderComponent from '@/components/atoms/HeaderComponent'
 import User from '@/components/molecules/User'
 import Stats from '@/components/molecules/Stats'
 import Statement from '@/components/molecules/Statement'
@@ -59,6 +55,7 @@ import VueScrollTo from 'vue-scrollto'
 export default {
   name: 'Survey',
   components: {
+    HeaderComponent,
     User,
     Stats,
     Statement,
@@ -111,11 +108,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.header {
-  background-color: #252526;
-  padding: 24px 24px 54px;
-}
-
 .submit-container {
   padding: 0 24px 24px;
   box-sizing: border-box;

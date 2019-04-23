@@ -1,37 +1,12 @@
 <template>
   <ul class="options">
-    <li v-for="(opt, key) in options"
-      :key="key"
-      class="option"
-    >
-      <label class="option-container">
-        <input class="option-input"
-          v-model="optionsId"
-          type="radio"
-          :value="key"
-          @change="$emit('handleSelect')"
-        >
-        <span class="option-label">
-          {{opt}}
-        </span>
-      </label>
-    </li>
+    <slot/>
   </ul>
 </template>
 
 <script>
 export default {
   name: 'Options',
-  props: {
-    options: {
-      type: Array,
-      required: true
-    },
-    id: {
-      type: Number,
-      required: true
-    }
-  },
   data() {
     return {
       optionsId: this.id
@@ -55,74 +30,112 @@ export default {
 .option-label {
   position: relative;
   background-color: #FFF;
-  padding: 16px 16px 16px 48px;
+  padding: 16px 48px;
   display: block;
   border-radius: 4px;
   font-size: 16px;
   line-height: 20px;
   box-shadow: 0 2px 14px 0px rgba(#000,.04);
-
-  &:before,
-  &:after {
-    position: absolute;
-    top: 50%;
-    left: 16px;
-    height: 20px;
-    width: 20px;
-    transform: translateY(-50%);
-    box-sizing: border-box;
-  }
-
-  &:before {
-    content: '';
-    appearance: none;
-    border: solid 1px #C2C2C2;
-    height: 20px;
-    flex: 0 0 20px;
-    border-radius: 20px;
-    margin: 0 12px 0 0;
-    outline: none;
-  }
-
-  &:after {
-    content: "\f4a7";
-    transition: opacity .3s;
-    color: #FFF;
-    opacity: 0;
-    text-align: center;
-    line-height: 20px;
-    display: inline-block;
-    font-family: "Ionicons";
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
 }
 
-.option-input {
-  position: absolute;
-  appearance: none;
-  padding: 0;
-  margin: 0;
-  opacity: 0;
+.options {
+  &.-inline {
 
-  &:checked + .option-label {
-    background-color: #E9794D;
-    color: #FFF;
+    .option-label {
+      padding: 16px 16px 16px 48px;
 
-    &:before {
-      background-color: #FB9F7B;
-      border-color: #FB9F7B;
+      &:before,
+      &:after {
+        position: absolute;
+        top: 50%;
+        left: 16px;
+        height: 20px;
+        width: 20px;
+        transform: translateY(-50%);
+        box-sizing: border-box;
+      }
+
+      &:before {
+        content: '';
+        appearance: none;
+        border: solid 1px #C2C2C2;
+        height: 20px;
+        flex: 0 0 20px;
+        border-radius: 20px;
+        margin: 0 12px 0 0;
+        outline: none;
+      }
+
+      &:after {
+        content: "\f4a7";
+        transition: opacity .3s;
+        color: #FFF;
+        opacity: 0;
+        text-align: center;
+        line-height: 20px;
+        display: inline-block;
+        font-family: "Ionicons";
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
     }
 
-    &:after {
-      opacity: 1;
+    .option-input {
+      position: absolute;
+      appearance: none;
+      padding: 0;
+      margin: 0;
+      opacity: 0;
+
+      &:checked + .option-label {
+        background-color: #E9794D;
+        color: #FFF;
+
+        &:before {
+          background-color: #FB9F7B;
+          border-color: #FB9F7B;
+        }
+
+        &:after {
+          opacity: 1;
+        }
+      }
     }
+
+    .drag {
+      display: none;
+    }
+
+  }
+  &.-multiline {
+    .drag, .remove-option {
+      position: absolute;
+      display: block;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+      line-height: 1;
+      width: 48px;
+      box-sizing: border-box;
+      text-align: center;
+      color: #CACACA;
+      padding: 16px 14px 16px 16px;
+    }
+
+    .remove-option {
+      right: 0;
+      left: auto;
+      color: #878787;
+      font-size: 12px;
+      padding: 20px 20px 20px 16px;
+    }
+
   }
 }
 
