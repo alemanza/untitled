@@ -6,24 +6,21 @@
     <div class="step-data">
       <div class="tags-input-container">
         <div class="textarea-container">
-          <textarea
+          <Textarea
             v-model="tag"
-            @keyup.enter="addItem"
-            @change="addItem"
-            cols="30"
             placeholder="Escribí un tag..."
-            class="textarea"
-            rows="1"
-          >
-          </textarea>
-          <span class="textarea-border"></span>
+            class="-light"
+            :rows="1"
+            @handleApply="addItem"
+            no-resize
+          />
         </div>
         <p class="step-rules">Separa las etiquetas con un ENTER o una coma.</p>
       </div>
 
       <ul class="tags">
-        <li v-for="(tag, key) in survey.tags" :key="key" class="tag">
-          <span class="tag-label" @click="removeItem(key)">{{tag.value}}</span>
+        <li v-for="(tag, key) in survey.tags" :key="key" class="tag" @click="removeItem(key)">
+          <span class="tag-label">{{tag.value}}</span>
           <span class="tag-icon icon ion-ios-settings"></span>
         </li>
       </ul>
@@ -35,8 +32,13 @@
 </template>
 
 <script>
+import Textarea from '@/components/atoms/Textarea'
+
 export default {
-  name: 'NewStepThree',
+  name: 'EditTags',
+  components: {
+    Textarea
+  },
   data() {
     return {
       tag: '',
@@ -55,6 +57,7 @@ export default {
         }
       });
       this.tag = ''
+      this.$emit('handleTags', this.survey.tags)
     },
     removeItem(el) {
       this.$delete(this.survey.tags, el)
@@ -82,36 +85,6 @@ padding: 0 24px 24px;
 
 .textarea-container {
   margin-bottom: 12px;
-}
-
-.textarea {
-  appearance: none;
-  margin: 0 0 8px 0;
-  border: none;
-  background-color: transparent;
-  resize: none;
-  font-size: 24px;
-  line-height: 32px;
-  color: #252526;
-  width: 100%;
-  outline: none;
-  height: auto;
-	min-height: 32px;
-	box-sizing: border-box;
-  display: block;
-
-  &::-webkit-resizer {
-    display: none;
-  }
-
-  &::placeholder {
-    color: #D1C4A8;
-  }
-}
-
-.textarea-border {
-  border-bottom: solid 1px #D1C4A8;
-  display: block;
 }
 
 .step-rules {

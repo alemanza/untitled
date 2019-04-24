@@ -5,14 +5,14 @@
         <li v-for="(opt, key) in survey.options" :key="key" class="step-option">
           <label class="option-label">
             <i class="drag icon ion-ios-settings"></i>
-            <textarea
+            <Textarea
               v-model="opt.value"
-              class="textarea"
+              inline
               :maxlength="maxlength"
               rows="1"
               :placeholder="`Escribí la respuesta ${key + 1}`"
-              @input="fitToContent"
-            ></textarea>
+              @input="handleOption"
+            />
             <i class="remove-option icon ion-ios-settings" @click="removeItem(key)"></i>
           </label>
             <p class="step-rules">Tenés 41 caracteres para utilizar en la respuesta.</p>
@@ -29,14 +29,17 @@
 </template>
 
 <script>
-import Options from '@/components/molecules/Options'
+import Textarea from '@/components/atoms/Textarea'
+
 import ButtonGhost from '@/components/atoms/ButtonGhost'
+import Options from '@/components/molecules/Options'
 
 export default {
-  name: 'NewStepTwo',
+  name: 'EditOptions',
   components: {
-    Options,
+    Textarea,
     ButtonGhost,
+    Options,
   },
   data() {
     return {
@@ -50,6 +53,9 @@ export default {
     }
   },
   methods: {
+    handleOption() {
+      this.$emit('handleOptions', this.survey.options)
+    },
     addItem() {
       this.survey.options.push({value: null})
     },
@@ -58,14 +64,6 @@ export default {
         this.$delete(this.survey.options, el)
       }
     },
-    fitToContent(e) {
-      const textArea = e.target
-      const lineHeight = 20
-      textArea.style.height = 'auto';
-      const scHeight = textArea.scrollHeight;
-      const rows = Math.ceil((scHeight) / lineHeight)
-      textArea.style.height = (lineHeight * rows)+'px';
-    }
   }
 }
 </script>

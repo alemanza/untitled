@@ -2,10 +2,10 @@
   <div>
     <HeaderComponent>
       <h2 class="title">Nueva encuesta</h2>
-      <EditStatement/>
+      <EditStatement @handleStatement="statementChange"/>
     </HeaderComponent>
-    <EditOptions/>
-    <EditTags @submit="submit"/>
+    <EditOptions @handleOptions="optionsChange"/>
+    <EditTags @handleTags="tagsChange"/>
   </div>
 </template>
 
@@ -37,7 +37,13 @@ export default {
   },
   methods: {
     statementChange(data) {
-      this.survey = { ...this.survey, ...data }
+      this.survey.statement = data
+    },
+    optionsChange(data) {
+      this.survey.options = data
+    },
+    tagsChange(data) {
+      this.survey.tags = data
     },
     submit(data) {
       this.survey = { ...this.survey, ...data }
