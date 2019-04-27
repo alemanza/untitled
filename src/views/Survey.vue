@@ -73,13 +73,9 @@ export default {
     }
   },
   mounted() {
-    // const TEST_ID ='iRaqYqFdC3jLqT7b1ufM'
     const surveyId = this.$route.params.id
 
-
     const surveyRef = DB.collection('surveys').doc(surveyId)
-
-
     surveyRef.get()
       .then(res => {
         this.survey = res.data()
@@ -92,7 +88,6 @@ export default {
           .catch(err => {
               console.log("Error getting documents: ", err);
           });
-
 
       })
       .catch(err => {

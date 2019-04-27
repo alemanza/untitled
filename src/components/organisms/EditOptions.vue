@@ -81,7 +81,6 @@ export default {
   },
   methods: {
     handleOption() {
-      console.log(this.$children[1])
       this.$emit('handleOptions', this.survey.options)
     },
     addItem() {

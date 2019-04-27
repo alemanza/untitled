@@ -3,7 +3,7 @@
     <Avatar class="-md" :url="data.photoURL"/>
     <div class="description">
       <span class="name">{{data.displayName}}</span>
-      <span class="surveys">25 encuestas</span>
+      <span class="surveys">{{surveyLength}}</span>
     </div>
     <Button class="button">Seguir</Button>
   </div>
@@ -23,6 +23,17 @@ export default {
     data: {
       type: Object,
       default: () => {}
+    }
+  },
+  computed: {
+    surveyLength() {
+      if (this.data.surveyIDs && this.data.surveyIDs.length < 2) {
+        return `${this.data.surveyIDs.length} encuesta`
+      } else if (this.data.surveyIDs && this.data.surveyIDs.length >= 2){
+        return `${this.data.surveyIDs.length} encuestas`
+      } else {
+        return ''
+      }
     }
   }
 }

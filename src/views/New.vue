@@ -32,12 +32,13 @@ export default {
   },
   data() {
     return {
-      survey: {}
+      survey: {},
+      userSurveys: []
     }
   },
   computed: {
-    ownerId() {
-      return this.$store.getters.currentUser.uid
+    currentUser() {
+      return this.$store.getters.currentUser
     }
   },
   methods: {
@@ -51,7 +52,7 @@ export default {
       this.survey.tags = data
     },
     submitSurvey() {
-      const ownerId = this.ownerId
+      const ownerId = this.currentUser.uid
       const { statement, options, tags } = this.survey
 
       DB.collection('surveys').add({
@@ -61,8 +62,16 @@ export default {
         statement,
         options,
         tags
-      }).then(() => {
-        console.log('encuesta adentro!')
+      }).then(surv => {
+        if (this.currentUser.surveyIDs) {
+          this.userSurveys = [...this.currentUser.surveyIDs, surv.id]
+        } else {
+          this.userSurveys = [surv.id]
+        }
+        DB.collection('users').doc(this.currentUser.uid).update('surveyIDs', this.userSurveys)
+          .then(res => {
+            console.log('encuesta creada!')
+          })
       }).catch(err => {
         console.error(err)
       })
