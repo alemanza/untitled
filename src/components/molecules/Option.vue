@@ -1,5 +1,5 @@
 <template>
-  <div class="options">
+  <div class="option">
     <slot/>
   </div>
 </template>
@@ -16,11 +16,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.options {
-  padding: 0 24px 24px;
-  margin-top: -26px;
-}
-
 .option {
   & + & {
     margin-top: 8px;

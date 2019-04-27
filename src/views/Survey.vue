@@ -3,7 +3,7 @@
     <HeaderComponent>
 
       <!-- Survey User -->
-      <User/>
+      <User :data="owner"/>
 
       <!-- Survey Stats -->
       <Stats />
@@ -15,7 +15,7 @@
 
     <!-- Survey Options -->
     <Options class="-inline">
-      <li v-for="(opt, key) in survey.options"
+      <div v-for="(opt, key) in survey.options"
         :key="key"
         class="option"
       >
@@ -27,10 +27,10 @@
             @change="handleSelect"
           >
           <span class="option-label">
-            {{opt}}
+            {{opt.value}}
           </span>
         </label>
-      </li>
+      </div>
 
     </Options>
 
@@ -52,6 +52,8 @@ import Options from '@/components/molecules/Options'
 
 import VueScrollTo from 'vue-scrollto'
 
+import { DB } from '../helpers/firebaseConf'
+
 export default {
   name: 'Survey',
   components: {
@@ -64,20 +66,38 @@ export default {
   data() {
     return {
       survey: {
-        id: 123,
-        limitTime: '12-32-44',
-        statement: '¿Quién creés que va a ganar las elecciones este año en la Ciudad Autónoma de Buenos Aires?',
-        selected: null,
-        options: [
-          'Cambiemos',
-          'Unión Ciudadana',
-          'Frente Renovador',
-          'Frente de Izquierda y de los Trabajadores',
-          'Otro partido'
-        ],
+        statement: ''
       },
+      owner: {},
       selected: false
     }
+  },
+  mounted() {
+    // const TEST_ID ='iRaqYqFdC3jLqT7b1ufM'
+    const surveyId = this.$route.params.id
+
+
+    const surveyRef = DB.collection('surveys').doc(surveyId)
+
+
+    surveyRef.get()
+      .then(res => {
+        this.survey = res.data()
+
+        const ownersRef = DB.collection('users').doc(res.data().ownerId)
+        ownersRef.get()
+          .then(res => {
+            this.owner = res.data()
+          })
+          .catch(err => {
+              console.log("Error getting documents: ", err);
+          });
+
+
+      })
+      .catch(err => {
+          console.log("Error getting documents: ", err);
+      });
   },
   methods: {
     scrollToBottom() {

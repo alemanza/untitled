@@ -6,6 +6,11 @@
     </HeaderComponent>
     <EditOptions @handleOptions="optionsChange"/>
     <EditTags @handleTags="tagsChange"/>
+
+    <div class="submit-container">
+      <button @click="submitSurvey">Crear Encuesta</button>
+    </div>
+
   </div>
 </template>
 
@@ -45,8 +50,7 @@ export default {
     tagsChange(data) {
       this.survey.tags = data
     },
-    submit(data) {
-      this.survey = { ...this.survey, ...data }
+    submitSurvey() {
       const ownerId = this.ownerId
       const { statement, options, tags } = this.survey
 
@@ -62,7 +66,6 @@ export default {
       }).catch(err => {
         console.error(err)
       })
-
     }
   }
 }

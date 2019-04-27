@@ -24,9 +24,6 @@
           <span class="tag-icon icon ion-ios-settings"></span>
         </li>
       </ul>
-      <div class="submit-container">
-        <button @click="$emit('submit', survey)">Crear Encuesta</button>
-      </div>
     </div>
   </div>
 </template>

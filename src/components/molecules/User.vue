@@ -1,8 +1,8 @@
 <template>
   <div class="user">
-    <Avatar class="-md"/>
+    <Avatar class="-md" :url="data.photoURL"/>
     <div class="description">
-      <span class="name">Marina Espósito</span>
+      <span class="name">{{data.displayName}}</span>
       <span class="surveys">25 encuestas</span>
     </div>
     <Button class="button">Seguir</Button>
@@ -18,6 +18,12 @@ export default {
   components: {
     Avatar,
     Button,
+  },
+  props: {
+    data: {
+      type: Object,
+      default: () => {}
+    }
   }
 }
 

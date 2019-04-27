@@ -1,26 +1,16 @@
 <template>
   <div id="app">
-    <!-- <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div> -->
     <Header/>
     <router-view/>
-    <br>
-    <br>
-    <br>
-    <Logout />
   </div>
 </template>
 
 <script>
-import Logout from '@/components/atoms/Logout'
 import Header from '@/components/organisms/Header'
 
 export default {
   components: {
     Header,
-    Logout
   }
 }
 </script>
@@ -64,5 +54,8 @@ body {
 }
 ol, ul {
 	list-style: none;
+}
+a {
+  text-decoration: none;
 }
 </style>

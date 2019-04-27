@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home';
+import Home from './views/Home'
 import Login from './views/Login'
 import New from './views/New'
+import Survey from './views/Survey'
 import Tos from './views/Tos'
 import PrivacyPolicy from './views/PrivacyPolicy'
 
@@ -14,10 +15,10 @@ const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
-    {
-      path: '*',
-      redirect: '/login'
-    },
+    // {
+    //   path: '*',
+    //   redirect: '/login'
+    // },
     {
       path: '/',
       name: 'Home',
@@ -43,6 +44,11 @@ const router = new Router({
       path: '/new',
       name: 'New',
       component: New
+    },
+    {
+      path: '/survey/:id',
+      name: 'Survey',
+      component: Survey
     },
     {
       path: '/tos',

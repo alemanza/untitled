@@ -2,8 +2,9 @@
   <header>
     <Logo />
     <nav class="actions">
+      <Logout/>
       <div class="actions-items">
-        <span class="item"><strong>+</strong> Crear encuesta</span>
+        <router-link :to="{ name: 'New' }" class="item"><strong>+</strong> Crear encuesta</router-link>
       </div>
       <Avatar :url="user.photoURL"/>
     </nav>
@@ -11,12 +12,14 @@
 </template>
 
 <script>
+import Logout from '@/components/atoms/Logout'
 import Logo from '@/components/atoms/Logo'
 import Avatar from '@/components/atoms/Avatar'
 
 export default {
   name: 'Header',
   components: {
+    Logout,
     Logo,
     Avatar
   },

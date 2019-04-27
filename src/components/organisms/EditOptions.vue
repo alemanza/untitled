@@ -2,21 +2,32 @@
   <div>
     <div class="step-data">
       <Options class="step-options -multiline">
-        <li v-for="(opt, key) in survey.options" :key="key" class="step-option">
-          <label class="option-label">
-            <i class="drag icon ion-ios-settings"></i>
-            <Textarea
-              v-model="opt.value"
-              inline
-              :maxlength="maxlength"
-              rows="1"
-              :placeholder="`Escribí la respuesta ${key + 1}`"
-              @input="handleOption"
-            />
-            <i class="remove-option icon ion-ios-settings" @click="removeItem(key)"></i>
-          </label>
-            <p class="step-rules">Tenés 41 caracteres para utilizar en la respuesta.</p>
-        </li>
+
+        <Draggable
+          v-model="survey.options"
+          handle=".drag"
+          v-bind="dragOptions"
+          @input="handleOption"
+        >
+          <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+            <Option v-for="(opt, key) in survey.options" :key="key" class="step-option">
+              <label class="option-label">
+                <i class="drag icon ion-ios-settings"></i>
+                <Textarea
+                  v-model="opt.value"
+                  inline
+                  :maxlength="maxlength"
+                  rows="1"
+                  :placeholder="`Escribí la respuesta ${key + 1}`"
+                  @input="handleOption"
+                />
+                <i class="remove-option icon ion-ios-settings" @click="removeItem(key)"></i>
+              </label>
+                <p class="step-rules">Tenés 41 caracteres para utilizar en la respuesta.</p>
+            </Option>
+          </transition-group>
+        </Draggable>
+
       </Options>
 
       <div class="button-container">
@@ -32,14 +43,19 @@
 import Textarea from '@/components/atoms/Textarea'
 
 import ButtonGhost from '@/components/atoms/ButtonGhost'
+import Option from '@/components/molecules/Option'
 import Options from '@/components/molecules/Options'
+
+import Draggable from 'vuedraggable'
 
 export default {
   name: 'EditOptions',
   components: {
     Textarea,
     ButtonGhost,
+    Option,
     Options,
+    Draggable,
   },
   data() {
     return {
@@ -50,10 +66,22 @@ export default {
         ]
       },
       maxlength: 50,
+      drag: false,
+    }
+  },
+  computed: {
+    dragOptions() {
+      return {
+        animation: 200,
+        group: "description",
+        disabled: false,
+        ghostClass: "ghost"
+      };
     }
   },
   methods: {
     handleOption() {
+      console.log(this.$children[1])
       this.$emit('handleOptions', this.survey.options)
     },
     addItem() {
