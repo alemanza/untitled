@@ -3,7 +3,7 @@
     <h1>This is an about page</h1>
     <p>{{displayName}}</p>
     <p>{{email}}</p>
-    <img :src="photoURL" />
+    <img :src="photoURL" style="width: 100%; max-width: 200px; margin: 40px auto; display: block;"/>
   </div>
 </template>
 

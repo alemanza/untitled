@@ -21,17 +21,12 @@ export default {
     }
   },
   mounted() {
-    DB.collection('surveys').get()
-      .then(snapshot => {
+    DB.collection('surveys').onSnapshot(snapshot => {
         snapshot.forEach(doc => {
           const docData = { _id: doc.id, ...doc.data() }
           this.surveys.push(docData)
         });
       })
-      .catch(function(error) {
-          console.log("Error getting documents: ", error);
-      });
-
   }
 }
 </script>

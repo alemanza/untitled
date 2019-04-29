@@ -33,7 +33,7 @@ export default {
   data() {
     return {
       survey: {},
-      userSurveys: []
+      userSvs: []
     }
   },
   computed: {
@@ -55,25 +55,32 @@ export default {
       const ownerId = this.currentUser.uid
       const { statement, options, tags } = this.survey
 
-      DB.collection('surveys').add({
+      // DB Refs
+      const svsRef = DB.collection('surveys')
+      const cuRef = DB.collection('users').doc(ownerId)
+
+      svsRef.add({
         ownerId,
-        startDate: new Date(),
-        status: 'open',
         statement,
         options,
-        tags
-      }).then(surv => {
-        if (this.currentUser.surveyIDs) {
-          this.userSurveys = [...this.currentUser.surveyIDs, surv.id]
-        } else {
-          this.userSurveys = [surv.id]
-        }
-        DB.collection('users').doc(this.currentUser.uid).update('surveyIDs', this.userSurveys)
-          .then(res => {
-            console.log('encuesta creada!')
-          })
-      }).catch(err => {
-        console.error(err)
+        tags,
+      })
+      .then(svDB => {
+        return DB.runTransaction(transaction => {
+          // This code may get re-run multiple times if there are conflicts.
+          return transaction.get(cuRef).then(cuRes => {
+              if (cuRes.exists && cuRes.data().surveyIDs) {
+                this.userSvs = cuRes.data().surveyIDs
+              }
+              this.userSvs.push(svDB.id)
+              transaction.update(cuRef, 'surveyIDs', this.userSvs)
+
+          });
+        }).then(() => {
+            console.log("Transaction successfully committed!");
+        }).catch(error => {
+            console.log("Transaction failed: ", error);
+        });
       })
     }
   }

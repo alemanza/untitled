@@ -27,15 +27,8 @@ export default {
   }
 }
 
-.option-label {
-  position: relative;
-  background-color: #FFF;
-  padding: 16px 48px;
-  display: block;
-  border-radius: 4px;
-  font-size: 16px;
-  line-height: 20px;
-  box-shadow: 0 2px 14px 0px rgba(#000,.04);
+.option-percent, .option-percent {
+  display: none;
 }
 
 .options {
@@ -135,7 +128,30 @@ export default {
       font-size: 12px;
       padding: 20px 20px 20px 16px;
     }
+  }
 
+  .option-label {
+    position: relative;
+    background-color: #FFF;
+    padding: 16px 48px;
+    display: block;
+    border-radius: 4px;
+    font-size: 16px;
+    line-height: 20px;
+    box-shadow: 0 2px 14px 0px rgba(#000,.04);
+
+    &.-voted {
+      .option-percent {
+        display: block;
+      }
+      .option-percent {
+        display: block;
+      }
+
+      &:before, &:after {
+        content: none;
+      }
+    }
   }
 }
 

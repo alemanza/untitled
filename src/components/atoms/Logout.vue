@@ -21,7 +21,7 @@ export default {
           console.log('Usuario deslogueado')
           this.$store.dispatch('logoutUser')
             .then(() => {
-              this.$router.replace('login')
+              this.$router.push('/login')
             })
             .catch(err => console.error(err))
         })

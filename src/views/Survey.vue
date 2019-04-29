@@ -21,13 +21,16 @@
       >
         <label>
           <input class="option-input"
-            v-model="survey.id"
+            v-model="survey.selection"
             type="radio"
             :value="key"
-            @change="handleSelect"
+            @change="handleSelect(key)"
           >
-          <span class="option-label">
+
+          <span class="option-label" :class="{'-voted' : voted}">
+            <span class="option-percent">{{stats[key]}}%</span>
             {{opt.value}}
+            <span class="option-percent-bar"></span>
           </span>
         </label>
       </div>
@@ -35,7 +38,7 @@
     </Options>
 
     <div v-show="selected" ref="surveyButton" class="submit-container">
-      <div class="submit">
+      <div @click="submitVote" class="submit">
         <i class="submit-icon ion-ios-settings"></i>
         <span class="submit-label">Enviar</span>
       </div>
@@ -66,33 +69,36 @@ export default {
   data() {
     return {
       survey: {
-        statement: ''
+        id: null,
+        statement: '',
+        selection: null,
       },
       owner: {},
-      selected: false
+      selected: false,
+      voted: false,
+      surveyVotes: [],
+      stats: []
     }
   },
-  mounted() {
-    const surveyId = this.$route.params.id
+  created() {
+    // Get svID
+    this.survey.id = this.$route.params.id
 
-    const surveyRef = DB.collection('surveys').doc(surveyId)
-    surveyRef.get()
-      .then(res => {
-        this.survey = res.data()
-
-        const ownersRef = DB.collection('users').doc(res.data().ownerId)
-        ownersRef.get()
-          .then(res => {
-            this.owner = res.data()
-          })
-          .catch(err => {
-              console.log("Error getting documents: ", err);
-          });
-
+    // DB Refs
+    const svRef = DB.collection('surveys').doc(this.survey.id)
+    svRef.onSnapshot(res => {
+      this.survey = {...this.survey, ...res.data()}
+      const ownerRef = DB.collection('users').doc(res.data().ownerId)
+      ownerRef.onSnapshot(res => {
+        this.owner = res.data()
       })
-      .catch(err => {
-          console.log("Error getting documents: ", err);
-      });
+    })
+  },
+  computed: {
+    // Get User in session
+    userID() {
+      return this.$store.getters.currentUser.uid
+    }
   },
   methods: {
     scrollToBottom() {
@@ -104,9 +110,9 @@ export default {
         offset: targetOffset,
         easing: 'ease-out'
       }
-
       VueScrollTo.scrollTo(this.$refs.surveyButton, 200, options)
     },
+
     handleSelect() {
       if (!this.selected) this.selected = true
 
@@ -116,7 +122,42 @@ export default {
           this.scrollToBottom()
         },200)
       }
+    },
 
+    submitVote() {
+      const votesRef = DB.collection('votes')
+      const voteRef = votesRef.where('surveyID', '==', this.survey.id)
+
+      const vote = {
+        userID: this.userID,
+        surveyID: this.survey.id,
+        optionSelected: this.survey.selection,
+      }
+
+      votesRef.add(vote)
+        .then(res => {
+          voteRef.get()
+            .then(res => {
+              if (!res.empty) {
+                res.docs.forEach(item => {
+                  this.surveyVotes.push(item.data().optionSelected)
+                })
+                this.voted = true
+                this.getResults()
+              }
+            })
+        })
+    },
+
+    getResults() {
+      const values = Object.values(this.surveyVotes)
+      const result = values.reduce((counter, value) => {
+        counter[value] = (counter[value] || 0) + 1
+        return counter
+      },[0])
+
+      const votesLength = Object.keys(this.surveyVotes).length;
+      this.stats = result.map(item => Math.round((item/votesLength)*100))
     }
   }
 }
