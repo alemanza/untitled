@@ -97,6 +97,23 @@ export default {
         &:after {
           opacity: 1;
         }
+
+        &.-voted {
+          background-color: #FFF;
+          color: #252526;
+          font-weight: bold;
+
+          &:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: solid 2px #E9794D;
+            border-radius: 4px;
+          }
+        }
       }
     }
 
@@ -132,7 +149,10 @@ export default {
 
   .option-label {
     position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
     background-color: #FFF;
+    color: #252526;
     padding: 16px 48px;
     display: block;
     border-radius: 4px;
@@ -146,12 +166,42 @@ export default {
       }
       .option-percent {
         display: block;
+        opacity: 1;
       }
 
       &:before, &:after {
         content: none;
       }
+
+      .option-label-value {
+        transform: translateX(20px);
+      }
     }
+  }
+
+  .option-label-value {
+    transition: transform .2s ease-out;
+    display: inline-block;
+  }
+
+  .option-percent {
+    color: #E9794D;
+    transition: opacity .6s ease-out;
+    opacity: 0;
+    position: absolute;
+    right: calc(100% - 54px);
+  }
+
+  .option-percent-bar {
+    position: absolute;
+    transition: transform ease-out .3s;
+    background-color: #E9794D;
+    height: 6px;
+    border-radius: 0 4px 0 0;
+    width: 100%;
+    bottom: 0;
+    left:0;
+    transform: translateX(-100%);
   }
 }
 

@@ -28,9 +28,11 @@
           >
 
           <span class="option-label" :class="{'-voted' : voted}">
-            <span class="option-percent">{{stats[key]}}%</span>
-            {{opt.value}}
-            <span class="option-percent-bar"></span>
+            <span class="option-percent">
+              <AnimateNumber :number="stats[key]"/>%
+            </span>
+            <span class="option-label-value">{{opt.value}}</span>
+            <span class="option-percent-bar" :style="{ transform: `translateX(${stats[key]-100}%)` }"></span>
           </span>
         </label>
       </div>
@@ -48,6 +50,7 @@
 
 <script>
 import HeaderComponent from '@/components/atoms/HeaderComponent'
+import AnimateNumber from '@/components/atoms/AnimateNumber'
 import User from '@/components/molecules/User'
 import Stats from '@/components/molecules/Stats'
 import Statement from '@/components/molecules/Statement'
@@ -65,6 +68,7 @@ export default {
     Stats,
     Statement,
     Options,
+    AnimateNumber,
   },
   data() {
     return {
@@ -156,9 +160,24 @@ export default {
         return counter
       },[0])
 
+
       const votesLength = Object.keys(this.surveyVotes).length;
-      this.stats = result.map(item => Math.round((item/votesLength)*100))
-    }
+      // this.stats = result.map(item => (item/votesLength)*100)
+      const roundFloor = result.map(item => {
+        // console.log((item/votesLength).toFixed(2))
+        return Math.floor((item/votesLength)*100)
+      })
+
+      // console.log(roundFloor)
+      this.stats = roundFloor
+
+      // const sum = 100 - roundFloor.reduce((a,c) => {
+      //   return a + c
+      // },0)
+
+      // console.log(sum)
+
+    },
   }
 }
 </script>
