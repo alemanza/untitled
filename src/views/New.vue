@@ -64,6 +64,8 @@ export default {
         statement,
         options,
         tags,
+        status: 'open',
+        createDate: new Date
       })
       .then(svDB => {
         return DB.runTransaction(transaction => {

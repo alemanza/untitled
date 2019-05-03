@@ -60,7 +60,7 @@ export default {
       }
 
       &:after {
-        content: "\f4a7";
+        content: "\f2bc";
         transition: opacity .3s;
         color: #FFF;
         opacity: 0;
@@ -106,7 +106,8 @@ export default {
           &:after {
             content: '';
             position: absolute;
-            bottom: 0;
+            top: 0;
+            transform: translateY(0);
             left: 0;
             width: 100%;
             height: 100%;

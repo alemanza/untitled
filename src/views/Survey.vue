@@ -6,7 +6,7 @@
       <User :data="owner"/>
 
       <!-- Survey Stats -->
-      <Stats />
+      <Stats :date="survey.createDate" :votes="surveyVotes" />
 
       <!-- Survey Statement -->
       <Statement :text="survey.statement"/>
@@ -25,6 +25,7 @@
             type="radio"
             :value="key"
             @change="handleSelect(key)"
+            :disabled="voted"
           >
 
           <span class="option-label" :class="{'-voted' : voted}">
@@ -39,12 +40,19 @@
 
     </Options>
 
-    <div v-show="selected" ref="surveyButton" class="submit-container">
-      <div @click="submitVote" class="submit">
-        <i class="submit-icon ion-ios-settings"></i>
+    <div v-show="selected && !voted" ref="surveyButton" class="submit-container">
+      <div @click.prevent="submitVote" class="submit">
+        <i class="submit-icon ion-md-send"></i>
         <span class="submit-label">Enviar</span>
       </div>
     </div>
+
+    <div v-if="voted" class="share-container">
+      <Share/>
+    </div>
+
+    <!-- Loader -->
+    <div v-if="loading" class="loader"></div>
   </section>
 </template>
 
@@ -55,7 +63,7 @@ import User from '@/components/molecules/User'
 import Stats from '@/components/molecules/Stats'
 import Statement from '@/components/molecules/Statement'
 import Options from '@/components/molecules/Options'
-
+import Share from '@/components/molecules/Share'
 import VueScrollTo from 'vue-scrollto'
 
 import { DB } from '../helpers/firebaseConf'
@@ -69,6 +77,7 @@ export default {
     Statement,
     Options,
     AnimateNumber,
+    Share,
   },
   data() {
     return {
@@ -76,12 +85,14 @@ export default {
         id: null,
         statement: '',
         selection: null,
+        createDate: null,
       },
       owner: {},
       selected: false,
       voted: false,
       surveyVotes: [],
-      stats: []
+      stats: [],
+      loading: false,
     }
   },
   created() {
@@ -96,6 +107,13 @@ export default {
       ownerRef.onSnapshot(res => {
         this.owner = res.data()
       })
+      const votesRef = DB.collection('votes').where('surveyID', '==', this.survey.id)
+        .onSnapshot(res => {
+          this.surveyVotes = []
+          res.forEach(item => {
+            this.surveyVotes = [...this.surveyVotes, item.data().optionSelected]
+          });
+        })
     })
   },
   computed: {
@@ -120,8 +138,11 @@ export default {
     handleSelect() {
       if (!this.selected) this.selected = true
 
+      const yOffset = window.pageYOffset
+      const innerHt = window.innerHeight
+      const offsetHt = document.documentElement.offsetHeight
       // bottomOfWindow
-      if (window.pageYOffset + window.innerHeight !== document.documentElement.offsetHeight) {
+      if ( yOffset + innerHt !== offsetHt || !this.voted ) {
         setTimeout(() => {
           this.scrollToBottom()
         },200)
@@ -129,27 +150,17 @@ export default {
     },
 
     submitVote() {
-      const votesRef = DB.collection('votes')
-      const voteRef = votesRef.where('surveyID', '==', this.survey.id)
-
+      this.loading = true
       const vote = {
         userID: this.userID,
         surveyID: this.survey.id,
         optionSelected: this.survey.selection,
       }
 
-      votesRef.add(vote)
-        .then(res => {
-          voteRef.get()
-            .then(res => {
-              if (!res.empty) {
-                res.docs.forEach(item => {
-                  this.surveyVotes.push(item.data().optionSelected)
-                })
-                this.voted = true
-                this.getResults()
-              }
-            })
+      const voteRef = DB.collection('votes')
+      voteRef.add(vote)
+        .then(() => {
+          this.getResults()
         })
     },
 
@@ -170,6 +181,8 @@ export default {
 
       // console.log(roundFloor)
       this.stats = roundFloor
+      this.voted = true
+      this.loading = false
 
       // const sum = 100 - roundFloor.reduce((a,c) => {
       //   return a + c
@@ -183,6 +196,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.survey {
+  position: relative;
+}
+
+.loader {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(#E9794D, .9);
+
+  &:before {
+    content: 'Loading...';
+    position: absolute;
+    font-size: 20px;
+    color: #FFF;
+  }
+}
+
 .submit-container {
   padding: 0 24px 24px;
   box-sizing: border-box;
@@ -208,6 +244,11 @@ export default {
 .submit-label {
   font-size: 16px;
   margin-left: 12px;
+}
+
+.share-container {
+  padding: 4px 24px 0;
+  margin-bottom: 40px;
 }
 
 </style>

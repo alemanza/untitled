@@ -20,11 +20,11 @@ export default {
       surveys: []
     }
   },
-  mounted() {
+  created() {
     DB.collection('surveys').onSnapshot(snapshot => {
         snapshot.forEach(doc => {
           const docData = { _id: doc.id, ...doc.data() }
-          this.surveys.push(docData)
+          this.surveys = [ ...this.surveys, docData ]
         });
       })
   }

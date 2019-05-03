@@ -21,5 +21,15 @@ export default {
   color: #EADFC8;
   border: solid 1px #EADFC8;
   border-radius: 4px;
+
+  &.-secondary {
+    color: #EADFC8;
+    background-color: #252526;
+  }
+
+  &.-ghost {
+    color: #252526;
+    border: solid 1px #252526;
+  }
 }
 </style>
