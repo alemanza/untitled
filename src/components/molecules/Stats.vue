@@ -31,46 +31,50 @@ export default {
     votes: {
       type: Array,
       default: () => []
+    },
+    voted: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
       showCount: false,
-      hours: '00',
-      minutes: '00',
-      seconds: '00',
+      hours: '- -',
+      minutes: '- -',
+      seconds: '- -',
+      inter: null,
     }
   },
   watch: {
     date(newVal) {
-      this.updateDate(newVal)
+      this.counter(newVal)
       this.showCount = true
+    },
+    voted() {
+      clearInterval(this.inter)
     }
   },
   methods: {
-    updateDate(date) {
-      const createdDate = new Date(date.seconds * 1000)
-      const countDownDate = new Date(createdDate.setDate(createdDate.getDate() + 1))
-      countDownDate.setDate(countDownDate.getDate() + 3)
+    counter() {
+      // let timeLimit = Moment(new Date(this.date.seconds * 1000)).add(1, 'd')
+      let timeLimit = Moment().add(10, 's')
 
-      // Update the count down every 1 second
-      const x = setInterval(() => {
+      this.inter = setInterval(() => {
+        const end = Moment().add(1, 's').isSameOrAfter(timeLimit)
 
-        // Get todays date and time
-        var now = new Date().getTime();
-
-        // Find the distance between now and the count down date
-        var distance = countDownDate - now;
-
-        // Time calculations for days, hours, minutes and seconds
-        this.hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        this.minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        this.seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        // If the count down is over, write some text
-        if (distance < 0) {
-          clearInterval(x);
+        if (end) {
+          this.$emit('timeOver')
+          clearInterval(this.inter);
         }
+
+        let now = Moment()
+        let diff = Moment.duration(timeLimit.diff(now))
+
+        this.hours = (diff.hours() < 10) ? "0" + diff.hours() : diff.hours()
+        this.minutes = (diff.minutes() < 10) ? "0" + diff.minutes() : diff.minutes()
+        this.seconds = (diff.seconds() < 10) ? "0" + diff.seconds() : diff.seconds()
+
       }, 1000);
     },
   }

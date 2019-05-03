@@ -6,7 +6,12 @@
       <User :data="owner"/>
 
       <!-- Survey Stats -->
-      <Stats :date="survey.createDate" :votes="surveyVotes" />
+      <Stats
+        :date="survey.createDate"
+        :votes="surveyVotes"
+        @timeOver="handleTimeOver"
+        :voted="initVote"
+      />
 
       <!-- Survey Statement -->
       <Statement :text="survey.statement"/>
@@ -53,6 +58,7 @@
 
     <!-- Loader -->
     <div v-if="loading" class="loader"></div>
+    <div v-if="timeOver" class="time-over"></div>
   </section>
 </template>
 
@@ -92,7 +98,9 @@ export default {
       voted: false,
       surveyVotes: [],
       stats: [],
+      initVote: false,
       loading: false,
+      timeOver: false,
     }
   },
   created() {
@@ -151,6 +159,7 @@ export default {
 
     submitVote() {
       this.loading = true
+      this.initVote = true
       const vote = {
         userID: this.userID,
         surveyID: this.survey.id,
@@ -191,6 +200,9 @@ export default {
       // console.log(sum)
 
     },
+    handleTimeOver() {
+      this.timeOver = true
+    },
   }
 }
 </script>
@@ -200,7 +212,7 @@ export default {
   position: relative;
 }
 
-.loader {
+.loader, .time-over {
   position: fixed;
   display: flex;
   justify-content: center;
@@ -216,6 +228,12 @@ export default {
     position: absolute;
     font-size: 20px;
     color: #FFF;
+  }
+}
+
+.time-over {
+  &:before {
+    content: 'Se terminó el tiempo';
   }
 }
 

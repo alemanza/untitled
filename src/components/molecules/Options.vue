@@ -191,6 +191,8 @@ export default {
     opacity: 0;
     position: absolute;
     right: calc(100% - 54px);
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   .option-percent-bar {
