@@ -58,7 +58,7 @@ export default {
   methods: {
     counter() {
       // let timeLimit = Moment(new Date(this.date.seconds * 1000)).add(1, 'd')
-      let timeLimit = Moment().add(10, 's')
+      let timeLimit = Moment().add(1, 'm')
 
       this.inter = setInterval(() => {
         const end = Moment().add(1, 's').isSameOrAfter(timeLimit)

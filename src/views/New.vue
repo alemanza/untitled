@@ -64,7 +64,7 @@ export default {
         statement,
         options,
         tags,
-        status: 'open',
+        status: true,
         createDate: new Date
       })
       .then(svDB => {

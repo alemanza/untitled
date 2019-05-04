@@ -1,5 +1,12 @@
 <template>
   <section class="survey">
+
+    <!-- <div v-if="">
+      sarasa
+    </div>
+    <div v-else>
+      serese
+    </div> -->
     <HeaderComponent>
 
       <!-- Survey User -->
@@ -180,24 +187,33 @@ export default {
         return counter
       },[0])
 
+      console.log('result: ', result)
 
       const votesLength = Object.keys(this.surveyVotes).length;
       // this.stats = result.map(item => (item/votesLength)*100)
+
+      const percentages = result.map(item => {
+        return Math.round(((item/votesLength)*100) * 10) / 10;
+      })
+
       const roundFloor = result.map(item => {
         // console.log((item/votesLength).toFixed(2))
         return Math.floor((item/votesLength)*100)
       })
 
+      console.log('percentages: ', percentages)
+      console.log('roundFloor: ', roundFloor)
+
       // console.log(roundFloor)
-      this.stats = roundFloor
+      this.stats = percentages
       this.voted = true
       this.loading = false
 
-      // const sum = 100 - roundFloor.reduce((a,c) => {
-      //   return a + c
-      // },0)
+      const totalVotes = 100 - roundFloor.reduce((a,c) => {
+        return a + c
+      },0)
 
-      // console.log(sum)
+      console.log('totalVotes: ', totalVotes)
 
     },
     handleTimeOver() {
