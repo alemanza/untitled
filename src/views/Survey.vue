@@ -42,7 +42,11 @@
 
           <span class="option-label" :class="{'-voted' : voted}">
             <span class="option-percent">
-              <AnimateNumber :number="stats[key]"/>%
+              <number
+                :to="stats[key]"
+                :duration=".5"
+                :format="percentageFormat"
+              />
             </span>
             <span class="option-label-value">{{opt.value}}</span>
             <span class="option-percent-bar" :style="{ transform: `translateX(${stats[key]-100}%)` }"></span>
@@ -71,7 +75,6 @@
 
 <script>
 import HeaderComponent from '@/components/atoms/HeaderComponent'
-import AnimateNumber from '@/components/atoms/AnimateNumber'
 import User from '@/components/molecules/User'
 import Stats from '@/components/molecules/Stats'
 import Statement from '@/components/molecules/Statement'
@@ -89,7 +92,6 @@ export default {
     Stats,
     Statement,
     Options,
-    AnimateNumber,
     Share,
   },
   data() {
@@ -187,37 +189,24 @@ export default {
         return counter
       },[0])
 
-      console.log('result: ', result)
-
       const votesLength = Object.keys(this.surveyVotes).length;
-      // this.stats = result.map(item => (item/votesLength)*100)
 
-      const percentages = result.map(item => {
-        return Math.round(((item/votesLength)*100) * 10) / 10;
+      this.stats = result.map(item => {
+        return parseFloat(((item/votesLength)*100).toFixed(1))
       })
 
-      const roundFloor = result.map(item => {
-        // console.log((item/votesLength).toFixed(2))
-        return Math.floor((item/votesLength)*100)
-      })
+      console.log('percentages: ', this.stats)
 
-      console.log('percentages: ', percentages)
-      console.log('roundFloor: ', roundFloor)
-
-      // console.log(roundFloor)
-      this.stats = percentages
+      // this.stats = percentages
       this.voted = true
       this.loading = false
-
-      const totalVotes = 100 - roundFloor.reduce((a,c) => {
-        return a + c
-      },0)
-
-      console.log('totalVotes: ', totalVotes)
 
     },
     handleTimeOver() {
       this.timeOver = true
+    },
+    percentageFormat(value) {
+      return `${parseFloat(value.toFixed(1))}%`
     },
   }
 }

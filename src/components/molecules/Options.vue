@@ -102,18 +102,6 @@ export default {
           background-color: #FFF;
           color: #252526;
           font-weight: bold;
-
-          &:after {
-            content: '';
-            position: absolute;
-            top: 0;
-            transform: translateY(0);
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: solid 2px #E9794D;
-            border-radius: 4px;
-          }
         }
       }
     }
@@ -190,7 +178,7 @@ export default {
     transition: opacity .6s ease-out;
     opacity: 0;
     position: absolute;
-    right: calc(100% - 54px);
+    right: calc(100% - 58px);
     top: 50%;
     transform: translateY(-50%);
   }

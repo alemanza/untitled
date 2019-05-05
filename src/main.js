@@ -6,6 +6,10 @@ import './registerServiceWorker'
 
 import { Auth, DB } from './helpers/firebaseConf'
 
+// Number Animation
+import VueNumber from 'vue-number-animation'
+Vue.use(VueNumber)
+
 Vue.config.productionTip = false
 
 let app = null
